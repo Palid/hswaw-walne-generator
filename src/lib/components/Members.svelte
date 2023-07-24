@@ -50,6 +50,15 @@
 		name="demo"
 		bind:value={inputDemo}
 		placeholder="Search..."
+		on:keypress={(e) => {
+			if (e.key !== 'Enter') return;
+			membersStore.update((store) => {
+				const item = store.get(results[0].item);
+				if (item) item.inPerson = !item.inPerson;
+				return store;
+			});
+			inputDemo = '';
+		}}
 	/>
 
 	<div class="table-container">
