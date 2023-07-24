@@ -10,7 +10,7 @@
 	let members: Member[] = [];
 
 	membersStore.subscribe((store) => {
-		members = Array.from($membersStore.values());
+		members = Array.from(store.values());
 	});
 
 	$: totalVotingMembers = members.reduce((acc, { voting }) => acc + (voting ? 1 : 0), 0);
@@ -41,13 +41,6 @@
 		page.offset * page.limit, // start
 		page.offset * page.limit + page.limit // end
 	);
-
-	function onInPersonClick(member: Member) {
-		membersStore.update((store) => {
-			member.inPerson = !member.inPerson;
-			return store;
-		});
-	}
 </script>
 
 <div class="w-full mt-10 mb-10 text-token">
@@ -89,28 +82,8 @@
 						<!-- Style is necessary here for proper hitboxes -->
 
 						<td style="padding: 0!important">
-							<label
-								class="flex items-center justify-center p-4 m-1 cursor-pointer"
-								on:click={(e) => {
-									e.preventDefault();
-									onInPersonClick(member);
-								}}
-								on:keyup={(e) => {
-									e.preventDefault();
-									onInPersonClick(member);
-								}}
-							>
-								<input
-									class="checkbox"
-									on:click={(e) => {
-										e.preventDefault();
-									}}
-									on:keyup={(e) => {
-										e.preventDefault();
-									}}
-									type="checkbox"
-									checked={member.inPerson}
-								/>
+							<label class="flex items-center justify-center p-4 m-1 cursor-pointer">
+								<input class="checkbox" type="checkbox" bind:checked={member.inPerson} />
 							</label>
 						</td>
 					</tr>
