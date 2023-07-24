@@ -1,5 +1,6 @@
 <script lang="ts">
 	import membersStore, { Member } from '$lib/stores/members-store';
+	import { browser } from '$app/environment';
 
 	import { fly } from 'svelte/transition';
 
@@ -17,14 +18,11 @@
 
 	const autocompleteOption = members.map((x) => x.nickname);
 
-	const fuzzySearch = createFuzzySearch(autocompleteOption);
+	const fuzzySearch = browser ? createFuzzySearch(autocompleteOption) : () => [];
 
 	let inputDemo = '';
 
 	$: results = fuzzySearch(inputDemo);
-
-	$: console.log(results);
-	$: console.log(inputDemo);
 
 	const isMember = <T extends unknown>(item?: T): item is T => !!item;
 
