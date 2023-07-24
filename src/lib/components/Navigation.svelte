@@ -8,29 +8,36 @@
 	import Syrenka from '$lib/components/HSMermaid.svelte';
 	import { page } from '$app/stores';
 
-	export let currentTile: number = 0;
+	$: routeId = $page.route.id;
 </script>
 
 <AppRail>
-	<!-- --- -->
-	<AppRailTile bind:group={currentTile} name="tile-1" value={0} title="tile-1">
+	<AppRailAnchor
+		href="/members/in-person"
+		title="In-person checklist"
+		selected={routeId === '/members/in-person'}
+	>
 		<svelte:fragment slot="lead">
 			<Fa class="w-full" icon={faUsers} />
 		</svelte:fragment>
 		<p>In-person checklist</p>
-	</AppRailTile>
-	<AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
+	</AppRailAnchor>
+	<AppRailAnchor
+		href="/members/passed"
+		title="Passed-permissions voters"
+		selected={routeId === '/members/passed'}
+	>
 		<svelte:fragment slot="lead">
 			<Fa class="w-full" icon={faFileSignature} />
 		</svelte:fragment>
 		<p>Passed-permissions voters</p>
-	</AppRailTile>
-	<AppRailTile bind:group={currentTile} name="tile-3" value={2} title="tile-3">
+	</AppRailAnchor>
+	<AppRailAnchor href="/voting/create" title="Create poll" selected={routeId === '/voting/create'}>
 		<svelte:fragment slot="lead">
 			<Fa class="w-full" icon={faCheckToSlot} />
 		</svelte:fragment>
 		<p>Create poll</p>
-	</AppRailTile>
+	</AppRailAnchor>
 	<!-- --- -->
 	<svelte:fragment slot="trail">
 		<AppRailAnchor href="https://hackerspace.pl" target="_blank" title="Account">

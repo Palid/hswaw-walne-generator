@@ -1,9 +1,5 @@
 <script lang="ts">
 	import Members from '$lib/components/Members.svelte';
-	import { page } from '$app/stores';
-
-	const components = [Members];
-	const currentComponent = components[0];
 </script>
 
 <svelte:head>
@@ -12,6 +8,6 @@
 </svelte:head>
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center flex flex-col items-center">
-		<svelte:component this={currentComponent} />
+		<svelte:component this={Members} memberField="inPerson" header="In-person" />
 	</div>
 </div>
