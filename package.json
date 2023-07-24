@@ -37,11 +37,13 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^4.3.0",
-		"vitest": "^0.25.3",
+		"vitest": "^0.25.3"
+	},
+	"type": "module",
+	"dependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.4.0",
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@nozbe/microfuzz": "^1.0.0",
 		"svelte-fa": "^3.0.4"
-	},
-	"type": "module"
+	}
 }
