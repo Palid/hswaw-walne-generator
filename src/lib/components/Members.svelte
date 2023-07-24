@@ -104,11 +104,9 @@
 									class="checkbox"
 									on:click={(e) => {
 										e.preventDefault();
-										onInPersonClick(member);
 									}}
 									on:keyup={(e) => {
 										e.preventDefault();
-										onInPersonClick(member);
 									}}
 									type="checkbox"
 									checked={member.inPerson}
