@@ -1,5 +1,17 @@
 {
 	"prettier.documentSelectors": ["**/*.svelte"],
+	"svelte.plugin.svelte.format.enable": false,
+	"eslint.probe": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"html",
+		"vue",
+		"markdown",
+		"svelte"
+	],
+	"eslint.validate": ["svelte", "typescript"],
 	"tailwindCSS.classAttributes": [
 		"class",
 		"accent",

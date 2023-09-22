@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	import Fa from 'svelte-fa/src/fa.svelte';
 	import {
 		faUsers,

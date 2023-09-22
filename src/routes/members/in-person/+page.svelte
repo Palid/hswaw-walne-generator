@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Members from '$lib/components/Members.svelte';
-	import { getContext } from 'svelte';
 </script>
 
 <svelte:head>

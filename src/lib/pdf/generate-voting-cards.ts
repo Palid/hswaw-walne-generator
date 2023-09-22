@@ -1,18 +1,18 @@
-import type { Member } from '$lib/stores/members-store';
+import type { Member } from '$lib/model/Member';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export function generateVotingCards(members: Member[], renderAllMembers = false) {
+export function generateVotingCards(members: Member[]) {
 	const totalPagesExp = '{total_pages_count_string}';
 
 	const candidating = members.filter((x) => x.candidating);
-	const votingAmount = members.filter((x) => x.voting).length;
 
 	const nicknamesToRender = candidating;
 
 	const doc = new jsPDF({
 		orientation: 'landscape'
 	});
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(jsPDF as any).autoTableSetDefaults({
 		bodyStyles: {
 			lineColor: 0,
@@ -22,8 +22,8 @@ export function generateVotingCards(members: Member[], renderAllMembers = false)
 			font: 'NotoSansLight'
 		},
 		columnStyles: {
-			lineColor: [255, 255, 255] as any,
-			lineWidth: 1 as any
+			lineColor: [255, 255, 255],
+			lineWidth: 1
 		},
 		headStyles: {
 			textColor: 0,
@@ -48,12 +48,10 @@ export function generateVotingCards(members: Member[], renderAllMembers = false)
 		}
 	);
 
-	const votingRows = nicknamesToRender.map((member, index) => [member.nickname, ' ', ' ', ' ']);
+	const votingRows = nicknamesToRender.map((member) => [member.nickname, ' ', ' ', ' ']);
 
 	doc.setFont('NotoSansLight', 'normal'); // set font
 	doc.setFontSize(5);
-
-	const size = doc.internal.pageSize.getWidth() / 3;
 
 	autoTable(doc, {
 		pageBreak: undefined,
@@ -75,12 +73,6 @@ export function generateVotingCards(members: Member[], renderAllMembers = false)
 					startY: data.cell.y + 2,
 					margin: { left: data.cell.x + 2 },
 					tableWidth: data.cell.width - 4,
-					styles: {
-						maxCellHeight: 4
-					},
-					// styles: {
-					// 	maxCellHeight: 4
-					// } as any,
 					body: [...votingRows].slice(0, 20)
 				});
 			}

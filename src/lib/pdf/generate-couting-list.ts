@@ -1,4 +1,4 @@
-import type { Member } from '$lib/stores/members-store';
+import type { Member } from '$lib/model/Member';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -6,16 +6,16 @@ export function generateSecretVotingList(members: Member[]) {
 	const totalPagesExp = '{total_pages_count_string}';
 
 	const candidatingMembers = members.filter((x) => x.candidating);
-	const nicknamesToRender = candidatingMembers;
 
 	const votingMembers = members.filter((x) => x.voting);
 
-	const fakeInserts = votingMembers.map((_) => '');
-	const tableBody = candidatingMembers.map((member, index) => [member.nickname, ...fakeInserts]);
+	const fakeInserts = votingMembers.map(() => '');
+	const tableBody = candidatingMembers.map((member) => [member.nickname, ...fakeInserts]);
 
 	const doc = new jsPDF({
 		orientation: 'landscape'
 	});
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(jsPDF as any).autoTableSetDefaults({
 		bodyStyles: {
 			lineColor: 0,
@@ -25,8 +25,8 @@ export function generateSecretVotingList(members: Member[]) {
 			font: 'NotoSansLight'
 		},
 		columnStyles: {
-			lineColor: [255, 255, 255] as any,
-			lineWidth: 1 as any
+			lineColor: [255, 255, 255],
+			lineWidth: 1
 		},
 		headStyles: {
 			textColor: 0,

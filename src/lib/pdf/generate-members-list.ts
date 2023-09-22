@@ -1,4 +1,4 @@
-import type { Member } from '$lib/stores/members-store';
+import type { Member } from '$lib/model/Member';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -20,6 +20,7 @@ export function generateMembersList(members: Member[], renderAllMembers = false)
 	]);
 
 	const doc = new jsPDF();
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(jsPDF as any).autoTableSetDefaults({
 		bodyStyles: {
 			lineColor: 0,
@@ -29,8 +30,8 @@ export function generateMembersList(members: Member[], renderAllMembers = false)
 			font: 'NotoSansLight'
 		},
 		columnStyles: {
-			lineColor: [255, 255, 255] as any,
-			lineWidth: 1 as any
+			lineColor: [255, 255, 255],
+			lineWidth: 1
 		},
 		headStyles: {
 			textColor: 0,
