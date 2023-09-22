@@ -1,12 +1,12 @@
-export interface ServerModel {
+export interface MemberPOJO {
 	readonly nickname: string;
 	readonly legalName?: string;
-	readonly voting: boolean;
-	readonly inPerson: boolean;
-	readonly candidating: boolean;
+	readonly voting?: boolean;
+	readonly inPerson?: boolean;
+	readonly candidating?: boolean;
 }
 
-export class Member implements ServerModel {
+export class Member implements Partial<MemberPOJO> {
 	#_voting = false;
 	/**
 	 * If inPerson is true, then person did not need pass their power to vote to someone else
@@ -43,14 +43,14 @@ export class Member implements ServerModel {
 		};
 	}
 
-	public static fromJSON(data: ServerModel): Member {
+	public static fromJSON(data: MemberPOJO): Member {
 		const member = new Member(data.nickname, data.legalName);
 		if (data.inPerson) {
 			member.inPerson = data.inPerson;
 		} else if (data.voting) {
 			member.voting = data.voting;
 		}
-		member.candidating = data.candidating;
+		member.candidating = Boolean(data.candidating);
 		return member;
 	}
 }

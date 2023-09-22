@@ -1,10 +1,10 @@
 import { browser } from '$app/environment';
-import { Member, type ServerModel } from '$lib/model/Member';
+import { Member, type MemberPOJO } from '$lib/model/Member';
 import { getContext } from 'svelte';
 import { writable } from 'svelte/store';
 
-export function makeStore(members: ServerModel[]): ReturnType<typeof writable<Member[]>> {
-	const mappedNicks: Member[] = members.map(({ nickname }) => new Member(nickname));
+export function makeStore(members: MemberPOJO[]): ReturnType<typeof writable<Member[]>> {
+	const mappedNicks: Member[] = members.map((data) => Member.fromJSON(data));
 	const store = writable(mappedNicks);
 	if (browser) {
 		if (localStorage) {

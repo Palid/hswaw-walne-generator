@@ -49,7 +49,7 @@
 			? results.map((x) => lookupItemIdxByNickname(x.item)).filter(isMember)
 			: prefilteredData;
 
-	let sortingOrder: 'asc' | 'dsc' = 'asc';
+	let sortingOrder: 'asc' | 'dsc' = 'dsc';
 
 	// Reactive
 	let page = {
@@ -122,6 +122,7 @@
 							prefilteredTable = prefilteredTable.reverse();
 						}}>Nickname</th
 					>
+					<th>Legal Name</th>
 					<th>{humanizeField(memberField)}</th>
 				</tr>
 			</thead>
@@ -134,6 +135,7 @@
 						}}
 					>
 						<td>{member.nickname}</td>
+						<td>{member.legalName}</td>
 						<!-- Style is necessary here for proper hitboxes -->
 						<td style="padding: 0!important" class=" min-w-[120px]">
 							<label class="flex items-center p-4 m-1 cursor-pointer justify-center">

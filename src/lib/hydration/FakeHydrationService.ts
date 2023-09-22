@@ -1,127 +1,135 @@
-import type { ServerModel } from '$lib/model/Member';
+import type { MemberPOJO } from '$lib/model/Member';
 import type { IHydrationService } from './IHydrationService';
 
 const fakerData = [
-	{ userName: 'Susana1' },
-	{ userName: 'Ephraim.OReilly0' },
-	{ userName: 'Wayne35' },
-	{ userName: 'Leatha_Beier57' },
-	{ userName: 'Pauline.Fisher27' },
-	{ userName: 'Jonas.Kerluke11' },
-	{ userName: 'Leland_Koelpin47' },
-	{ userName: 'Jennings_Jerde' },
-	{ userName: 'Lorena_Hammes13' },
-	{ userName: 'Morton84' },
-	{ userName: 'Joany_Wiegand' },
-	{ userName: 'Kaylah_Batz' },
-	{ userName: 'Elvis.Zemlak' },
-	{ userName: 'Okey75' },
-	{ userName: 'Jovanny35' },
-	{ userName: 'Cesar.Paucek66' },
-	{ userName: 'Alanna.Legros63' },
-	{ userName: 'Krystina_Ruecker' },
-	{ userName: 'Camryn_Wolf' },
-	{ userName: 'Clotilde.Conn' },
-	{ userName: 'Jordon.Gislason67' },
-	{ userName: 'Sasha_Bins' },
-	{ userName: 'Arely_Bartoletti88' },
-	{ userName: 'Brenda.Crooks65' },
-	{ userName: 'Gia51' },
-	{ userName: 'Jess_Cartwright17' },
-	{ userName: 'Alexandro.Hickle98' },
-	{ userName: 'Marjorie55' },
-	{ userName: 'Vivianne.Frami89' },
-	{ userName: 'Margarete_Dicki25' },
-	{ userName: 'Enos.Jakubowski37' },
-	{ userName: 'Viola_Kuhic51' },
-	{ userName: 'Anthony_Toy44' },
-	{ userName: 'Alverta20' },
-	{ userName: 'Marta.Stamm' },
-	{ userName: 'Humberto14' },
-	{ userName: 'Jaren13' },
-	{ userName: 'Jon21' },
-	{ userName: 'Imelda20' },
-	{ userName: 'Tiara.Haley' },
-	{ userName: 'Hugh_Williamson' },
-	{ userName: 'Shanie41' },
-	{ userName: 'Mallie.Labadie37' },
-	{ userName: 'Edmond68' },
-	{ userName: 'Johnathon9' },
-	{ userName: 'Josie70' },
-	{ userName: 'Macie.Quigley' },
-	{ userName: 'Dean_Schimmel21' },
-	{ userName: 'Helene_Rempel97' },
-	{ userName: 'Sarai_Adams63' },
-	{ userName: 'Landen33' },
-	{ userName: 'Natalia_Kirlin5' },
-	{ userName: 'Germaine97' },
-	{ userName: 'Julia.Moore53' },
-	{ userName: 'Jany_VonRueden97' },
-	{ userName: 'Pablo.Klocko' },
-	{ userName: 'Wilhelm38' },
-	{ userName: 'Dax27' },
-	{ userName: 'Veronica48' },
-	{ userName: 'Israel.Waelchi' },
-	{ userName: 'Celia_Torp90' },
-	{ userName: 'Marlin_Vandervort36' },
-	{ userName: 'Ines.Glover61' },
-	{ userName: 'Lorenz55' },
-	{ userName: 'Efrain47' },
-	{ userName: 'Maribel.Stanton' },
-	{ userName: 'Jonas.Herman' },
-	{ userName: 'Colten.Weimann42' },
-	{ userName: 'Johann13' },
-	{ userName: 'Angela_Pfannerstill18' },
-	{ userName: 'Lavonne_Lehner' },
-	{ userName: 'Florence.Nitzsche40' },
-	{ userName: 'Allie58' },
-	{ userName: 'Anne5' },
-	{ userName: 'Cheyenne1' },
-	{ userName: 'Terry.Hirthe62' },
-	{ userName: 'Mollie.Hand39' },
-	{ userName: 'Serena18' },
-	{ userName: 'Angel54' },
-	{ userName: 'Armando_Bogan' },
-	{ userName: 'Cornelius77' },
-	{ userName: 'Jazlyn_Renner' },
-	{ userName: 'Lawrence.Ziemann' },
-	{ userName: 'Spencer_Ledner' },
-	{ userName: 'Casimir_Spencer' },
-	{ userName: 'King_Gorczany' },
-	{ userName: 'Shakira_Pollich' },
-	{ userName: 'Chaim.Gutmann' },
-	{ userName: 'Carmela_Bayer' },
-	{ userName: 'Manuel.Stoltenberg59' },
-	{ userName: 'Karli.Schimmel' },
-	{ userName: 'Paolo56' },
-	{ userName: 'Steve6' },
-	{ userName: 'Coby.Skiles33' },
-	{ userName: 'Jovani.Lowe51' },
-	{ userName: 'Ernestine_Stokes' },
-	{ userName: 'Roosevelt.Vandervort82' },
-	{ userName: 'Heath.Kovacek23' },
-	{ userName: 'Mikayla.Boyer98' },
-	{ userName: 'Ivah45' }
-].map(({ userName }) => ({
-	nickname: userName
-}));
-
-// Sort alphabetically
-fakerData.sort(function (a, b) {
-	if (a < b) {
-		return -1;
-	}
-	if (a > b) {
-		return 1;
-	}
-	return 0;
-});
+	{ nickname: 'Susana1' },
+	{ nickname: 'Ephraim.OReilly0' },
+	{ nickname: 'Wayne35' },
+	{ nickname: 'Leatha_Beier57' },
+	{ nickname: 'Pauline.Fisher27' },
+	{ nickname: 'Jonas.Kerluke11' },
+	{ nickname: 'Leland_Koelpin47' },
+	{ nickname: 'Jennings_Jerde' },
+	{ nickname: 'Lorena_Hammes13' },
+	{ nickname: 'Morton84' },
+	{ nickname: 'Joany_Wiegand' },
+	{ nickname: 'Kaylah_Batz' },
+	{ nickname: 'Elvis.Zemlak' },
+	{ nickname: 'Okey75' },
+	{ nickname: 'Jovanny35' },
+	{ nickname: 'Cesar.Paucek66' },
+	{ nickname: 'Alanna.Legros63' },
+	{ nickname: 'Krystina_Ruecker' },
+	{ nickname: 'Camryn_Wolf' },
+	{ nickname: 'Clotilde.Conn' },
+	{ nickname: 'Jordon.Gislason67' },
+	{ nickname: 'Sasha_Bins' },
+	{ nickname: 'Arely_Bartoletti88' },
+	{ nickname: 'Brenda.Crooks65' },
+	{ nickname: 'Gia51' },
+	{ nickname: 'Jess_Cartwright17' },
+	{ nickname: 'Alexandro.Hickle98' },
+	{ nickname: 'Marjorie55' },
+	{ nickname: 'Vivianne.Frami89' },
+	{ nickname: 'Margarete_Dicki25' },
+	{ nickname: 'Enos.Jakubowski37' },
+	{ nickname: 'Viola_Kuhic51' },
+	{ nickname: 'Anthony_Toy44' },
+	{ nickname: 'Alverta20' },
+	{ nickname: 'Marta.Stamm' },
+	{ nickname: 'Humberto14' },
+	{ nickname: 'Jaren13' },
+	{ nickname: 'Jon21' },
+	{ nickname: 'Imelda20' },
+	{ nickname: 'Tiara.Haley' },
+	{ nickname: 'Hugh_Williamson' },
+	{ nickname: 'Shanie41' },
+	{ nickname: 'Mallie.Labadie37' },
+	{ nickname: 'Edmond68' },
+	{ nickname: 'Johnathon9' },
+	{ nickname: 'Josie70' },
+	{ nickname: 'Macie.Quigley' },
+	{ nickname: 'Dean_Schimmel21' },
+	{ nickname: 'Helene_Rempel97' },
+	{ nickname: 'Sarai_Adams63' },
+	{ nickname: 'Landen33' },
+	{ nickname: 'Natalia_Kirlin5' },
+	{ nickname: 'Germaine97' },
+	{ nickname: 'Julia.Moore53' },
+	{ nickname: 'Jany_VonRueden97' },
+	{ nickname: 'Pablo.Klocko' },
+	{ nickname: 'Wilhelm38' },
+	{ nickname: 'Dax27' },
+	{ nickname: 'Veronica48' },
+	{ nickname: 'Israel.Waelchi' },
+	{ nickname: 'Celia_Torp90' },
+	{ nickname: 'Marlin_Vandervort36' },
+	{ nickname: 'Ines.Glover61' },
+	{ nickname: 'Lorenz55' },
+	{ nickname: 'Efrain47' },
+	{ nickname: 'Maribel.Stanton' },
+	{ nickname: 'Jonas.Herman' },
+	{ nickname: 'Colten.Weimann42' },
+	{ nickname: 'Johann13' },
+	{ nickname: 'Angela_Pfannerstill18' },
+	{ nickname: 'Lavonne_Lehner' },
+	{ nickname: 'Florence.Nitzsche40' },
+	{ nickname: 'Allie58' },
+	{ nickname: 'Anne5' },
+	{ nickname: 'Cheyenne1' },
+	{ nickname: 'Terry.Hirthe62' },
+	{ nickname: 'Mollie.Hand39' },
+	{ nickname: 'Serena18' },
+	{ nickname: 'Angel54' },
+	{ nickname: 'Armando_Bogan' },
+	{ nickname: 'Cornelius77' },
+	{ nickname: 'Jazlyn_Renner' },
+	{ nickname: 'Lawrence.Ziemann' },
+	{ nickname: 'Spencer_Ledner' },
+	{ nickname: 'Casimir_Spencer' },
+	{ nickname: 'King_Gorczany' },
+	{ nickname: 'Shakira_Pollich' },
+	{ nickname: 'Chaim.Gutmann' },
+	{ nickname: 'Carmela_Bayer' },
+	{ nickname: 'Manuel.Stoltenberg59' },
+	{ nickname: 'Karli.Schimmel' },
+	{ nickname: 'Paolo56' },
+	{ nickname: 'Steve6' },
+	{ nickname: 'Coby.Skiles33' },
+	{ nickname: 'Jovani.Lowe51' },
+	{ nickname: 'Ernestine_Stokes' },
+	{ nickname: 'Roosevelt.Vandervort82' },
+	{ nickname: 'Heath.Kovacek23' },
+	{ nickname: 'Mikayla.Boyer98' },
+	{ nickname: 'Ivah45' }
+];
 
 class FakeHydrationService implements IHydrationService {
-	authorize(): Promise<boolean> {
-		throw new Error('Method not implemented.');
+	#getData() {
+		return [...fakerData].map((x) => ({
+			nickname: x.nickname,
+			legalName: Math.random() >= 0.5 ? x.nickname : undefined
+		}));
 	}
-	hydrate(): Promise<ServerModel[]> {
+
+	#sortData(data: Pick<MemberPOJO, 'nickname' | 'legalName'>[]) {
+		// Sort alphabetically
+		data.sort(function (a, b) {
+			const aLower = a.nickname.toLowerCase();
+			const bLower = b.nickname.toLowerCase();
+			if (aLower < bLower) {
+				return -1;
+			}
+			if (aLower > bLower) {
+				return 1;
+			}
+			return 0;
+		});
+	}
+
+	hydrate(): Promise<MemberPOJO[]> {
+		const data = this.#getData();
+		this.#sortData(data);
 		return Promise.resolve(fakerData);
 	}
 }
