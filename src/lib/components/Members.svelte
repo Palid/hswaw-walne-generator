@@ -5,8 +5,7 @@
 	import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
 	import createFuzzySearch from '@nozbe/microfuzz';
 	import type { Member } from '$lib/model/Member';
-	import { getContext } from 'svelte';
-	import { derived, type writable } from 'svelte/store';
+	import { derived } from 'svelte/store';
 	import { getMembersStoreContext } from '$lib/stores/members-store';
 
 	export let memberField: 'voting' | 'inPerson' | 'candidating';
@@ -20,6 +19,7 @@
 	});
 
 	function lookupItemIdxByNickname(nickname: string) {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const idx = $memberLookup.get(nickname)!;
 		return $membersStore[idx];
 	}
@@ -71,9 +71,6 @@
 			.split(/(?=[A-Z])/)
 			.map((x) => `${x.slice(0, 1).toUpperCase()}${x.slice(1).toLowerCase()}`)
 			.join(' ');
-	}
-	function change(v: any, e: any) {
-		v = e.target.checked;
 	}
 </script>
 
@@ -127,23 +124,33 @@
 				</tr>
 			</thead>
 			<tbody class="table-body text-left">
-				{#each paginatedSource as member, i}
+				{#each paginatedSource as member}
 					<tr
 						class="border-b border-slate-100 dark_border-slate-700"
 						transition:fly|local={{
 							duration: 150
 						}}
+						on:click={(e) => {
+							// Can't really fix the types in a sane way, this is OK.
+							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+							// @ts-ignore
+							if (e.target?.nodeName === 'INPUT' || e.target?.nodeName === 'LABEL') {
+								return;
+							}
+							member[memberField] = !member[memberField];
+							membersStore.set($membersStore);
+						}}
 					>
 						<td>{member.nickname}</td>
 						<td>{member.legalName}</td>
 						<!-- Style is necessary here for proper hitboxes -->
-						<td style="padding: 0!important" class=" min-w-[120px]">
+						<td style="padding: 0!important" data-click-ignore class=" min-w-[120px]">
 							<label class="flex items-center p-4 m-1 cursor-pointer justify-center">
 								<input
 									class="checkbox"
 									type="checkbox"
 									bind:checked={member[memberField]}
-									on:change={(e) => {
+									on:change={() => {
 										// Force svelte to re-set the store
 										membersStore.set($membersStore);
 									}}
