@@ -1,196 +1,54 @@
 import { browser } from '$app/environment';
+import { Member, type ServerModel } from '$lib/model/Member';
+import { getContext } from 'svelte';
 import { writable } from 'svelte/store';
 
-const fakerData = [
-	{ userName: 'Susana1' },
-	{ userName: 'Ephraim.OReilly0' },
-	{ userName: 'Wayne35' },
-	{ userName: 'Leatha_Beier57' },
-	{ userName: 'Pauline.Fisher27' },
-	{ userName: 'Jonas.Kerluke11' },
-	{ userName: 'Leland_Koelpin47' },
-	{ userName: 'Jennings_Jerde' },
-	{ userName: 'Lorena_Hammes13' },
-	{ userName: 'Morton84' },
-	{ userName: 'Joany_Wiegand' },
-	{ userName: 'Kaylah_Batz' },
-	{ userName: 'Elvis.Zemlak' },
-	{ userName: 'Okey75' },
-	{ userName: 'Jovanny35' },
-	{ userName: 'Cesar.Paucek66' },
-	{ userName: 'Alanna.Legros63' },
-	{ userName: 'Krystina_Ruecker' },
-	{ userName: 'Camryn_Wolf' },
-	{ userName: 'Clotilde.Conn' },
-	{ userName: 'Jordon.Gislason67' },
-	{ userName: 'Sasha_Bins' },
-	{ userName: 'Arely_Bartoletti88' },
-	{ userName: 'Brenda.Crooks65' },
-	{ userName: 'Gia51' },
-	{ userName: 'Jess_Cartwright17' },
-	{ userName: 'Alexandro.Hickle98' },
-	{ userName: 'Marjorie55' },
-	{ userName: 'Vivianne.Frami89' },
-	{ userName: 'Margarete_Dicki25' },
-	{ userName: 'Enos.Jakubowski37' },
-	{ userName: 'Viola_Kuhic51' },
-	{ userName: 'Anthony_Toy44' },
-	{ userName: 'Alverta20' },
-	{ userName: 'Marta.Stamm' },
-	{ userName: 'Humberto14' },
-	{ userName: 'Jaren13' },
-	{ userName: 'Jon21' },
-	{ userName: 'Imelda20' },
-	{ userName: 'Tiara.Haley' },
-	{ userName: 'Hugh_Williamson' },
-	{ userName: 'Shanie41' },
-	{ userName: 'Mallie.Labadie37' },
-	{ userName: 'Edmond68' },
-	{ userName: 'Johnathon9' },
-	{ userName: 'Josie70' },
-	{ userName: 'Macie.Quigley' },
-	{ userName: 'Dean_Schimmel21' },
-	{ userName: 'Helene_Rempel97' },
-	{ userName: 'Sarai_Adams63' },
-	{ userName: 'Landen33' },
-	{ userName: 'Natalia_Kirlin5' },
-	{ userName: 'Germaine97' },
-	{ userName: 'Julia.Moore53' },
-	{ userName: 'Jany_VonRueden97' },
-	{ userName: 'Pablo.Klocko' },
-	{ userName: 'Wilhelm38' },
-	{ userName: 'Dax27' },
-	{ userName: 'Veronica48' },
-	{ userName: 'Israel.Waelchi' },
-	{ userName: 'Celia_Torp90' },
-	{ userName: 'Marlin_Vandervort36' },
-	{ userName: 'Ines.Glover61' },
-	{ userName: 'Lorenz55' },
-	{ userName: 'Efrain47' },
-	{ userName: 'Maribel.Stanton' },
-	{ userName: 'Jonas.Herman' },
-	{ userName: 'Colten.Weimann42' },
-	{ userName: 'Johann13' },
-	{ userName: 'Angela_Pfannerstill18' },
-	{ userName: 'Lavonne_Lehner' },
-	{ userName: 'Florence.Nitzsche40' },
-	{ userName: 'Allie58' },
-	{ userName: 'Anne5' },
-	{ userName: 'Cheyenne1' },
-	{ userName: 'Terry.Hirthe62' },
-	{ userName: 'Mollie.Hand39' },
-	{ userName: 'Serena18' },
-	{ userName: 'Angel54' },
-	{ userName: 'Armando_Bogan' },
-	{ userName: 'Cornelius77' },
-	{ userName: 'Jazlyn_Renner' },
-	{ userName: 'Lawrence.Ziemann' },
-	{ userName: 'Spencer_Ledner' },
-	{ userName: 'Casimir_Spencer' },
-	{ userName: 'King_Gorczany' },
-	{ userName: 'Shakira_Pollich' },
-	{ userName: 'Chaim.Gutmann' },
-	{ userName: 'Carmela_Bayer' },
-	{ userName: 'Manuel.Stoltenberg59' },
-	{ userName: 'Karli.Schimmel' },
-	{ userName: 'Paolo56' },
-	{ userName: 'Steve6' },
-	{ userName: 'Coby.Skiles33' },
-	{ userName: 'Jovani.Lowe51' },
-	{ userName: 'Ernestine_Stokes' },
-	{ userName: 'Roosevelt.Vandervort82' },
-	{ userName: 'Heath.Kovacek23' },
-	{ userName: 'Mikayla.Boyer98' },
-	{ userName: 'Ivah45' }
-].map(({ userName }) => userName);
-
-// Sort alphabetically
-fakerData.sort(function (a, b) {
-	if (a < b) {
-		return -1;
-	}
-	if (a > b) {
-		return 1;
-	}
-	return 0;
-});
-
-export class Member {
-	#_voting = false;
-	/**
-	 * If inPerson is true, then person did not need pass their power to vote to someone else
-	 * due to not being able to be on the voting in person.
-	 * If it's false, then someone is voting for this person.
-	 */
-	#_inPerson = false;
-
-	public candidating = false;
-
-	constructor(public readonly nickname: string, public readonly legalName?: string) {}
-
-	public get voting() {
-		return this.#_voting;
-	}
-	public set voting(value) {
-		this.#_voting = value;
-	}
-
-	public get inPerson() {
-		return this.#_inPerson;
-	}
-	public set inPerson(value) {
-		this.#_voting = value;
-		this.#_inPerson = value;
-	}
-
-	public toJSON() {
-		return {
-			legalName: this.legalName,
-			nickname: this.nickname,
-			voting: this.voting,
-			inPerson: this.inPerson,
-			candidating: this.candidating
-		};
-	}
-}
-
-// function mapDataToMap(members: Array<[string, Member]>) {
-// 	return members.map
-// }
-
-const mappedNicks: Array<[string, Member]> = fakerData.map(
-	(x) => [x, new Member(x)] as [string, Member]
-);
-
-const membersStore = writable<Map<string, Member>>(new Map());
-
-// Hydrate store
-if (browser) {
-	if (localStorage) {
-		const items = localStorage.getItem('chosenMembers') ?? '[]';
-		try {
-			const parsed = JSON.parse(items);
-			if (parsed.length > 0) {
-				membersStore.set(new Map(parsed));
-			} else {
-				membersStore.set(new Map(mappedNicks));
-			}
-		} catch (err) {
-			membersStore.set(new Map(mappedNicks));
-		}
-	}
-	membersStore.subscribe((data) => {
+export function makeStore(members: ServerModel[]): ReturnType<typeof writable<Member[]>> {
+	const mappedNicks: Member[] = members.map(({ nickname }) => new Member(nickname));
+	const store = writable(mappedNicks);
+	if (browser) {
 		if (localStorage) {
-			const serialized = JSON.stringify(data, function replacer(key, value) {
-				if (value instanceof Map) {
-					return Array.from(value.entries()); // or with spread: value: [...value]
-				} else {
-					return value;
+			const lastUpdate = Number.parseInt(
+				localStorage.getItem('lastUpdateTime') ?? '0'.toString(),
+				10
+			);
+			// if >= 24h elapsed, clean the users cache.
+			const twenty_four_hours = 1000 * 60 * 24;
+			if (Date.now() >= lastUpdate + twenty_four_hours) {
+				localStorage.setItem('members', '[]');
+			}
+			const items = localStorage.getItem('members') ?? '[]';
+			try {
+				const parsed: ReturnType<Member['toJSON']>[] = JSON.parse(items);
+				if (parsed.length > 0) {
+					const mappedNicks = parsed.map((data) => {
+						return Member.fromJSON(data);
+					});
+					store.set(mappedNicks);
 				}
-			});
-			localStorage.setItem('chosenMembers', serialized);
+			} catch (err) {
+				// ignore
+			}
 		}
-	});
+		store.subscribe((data: Member[]) => {
+			if (localStorage) {
+				localStorage.setItem('lastUpdateTime', Date.now().toString());
+				const serialized = JSON.stringify(data, function replacer(key, value) {
+					if (value instanceof Map) {
+						return Array.from(value.entries()); // or with spread: value: [...value]
+					} else {
+						return value;
+					}
+				});
+
+				localStorage.setItem('members', serialized);
+			}
+		});
+	}
+
+	return store;
 }
 
-export default membersStore;
+export function getMembersStoreContext() {
+	return getContext<ReturnType<typeof writable<Member[]>>>('members');
+}

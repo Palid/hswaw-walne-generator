@@ -1,42 +1,52 @@
 <script lang="ts">
-	import membersStore, { Member } from '$lib/stores/members-store';
 	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
 
 	import { Paginator, type PaginationSettings } from '@skeletonlabs/skeleton';
 	import createFuzzySearch from '@nozbe/microfuzz';
-
-	let members: Member[] = [];
+	import type { Member } from '$lib/model/Member';
+	import { getContext } from 'svelte';
+	import { derived, type writable } from 'svelte/store';
+	import { getMembersStoreContext } from '$lib/stores/members-store';
 
 	export let memberField: 'voting' | 'inPerson' | 'candidating';
 	export let header: string;
 
-	membersStore.subscribe((store) => {
-		members = Array.from(store.values());
+	const membersStore = getMembersStoreContext();
+
+	const memberLookup = derived(membersStore, ($membersStore) => {
+		const arr: Array<[string, number]> = $membersStore.map((member, idx) => [member.nickname, idx]);
+		return new Map<string, number>(arr);
 	});
 
-	$: totalVotingMembers = members.reduce((acc, { voting }) => acc + Number(voting), 0);
-	$: totalInPersonMembers = members.reduce((acc, { inPerson }) => acc + Number(inPerson), 0);
-	$: totalCandidatingMembers = members.reduce(
+	function lookupItemIdxByNickname(nickname: string) {
+		const idx = $memberLookup.get(nickname)!;
+		return $membersStore[idx];
+	}
+
+	$: totalVotingMembers = $membersStore.reduce((acc, { voting }) => acc + Number(voting), 0);
+	$: totalInPersonMembers = $membersStore.reduce((acc, { inPerson }) => acc + Number(inPerson), 0);
+	$: totalCandidatingMembers = $membersStore.reduce(
 		(acc, { candidating }) => acc + Number(candidating),
 		0
 	);
 
-	const autocompleteOption = members.map((x) => x.nickname);
+	const autocompleteOption = $membersStore.map((x) => x.nickname);
 
 	const fuzzySearch = browser ? createFuzzySearch(autocompleteOption) : () => [];
 
-	let inputDemo = '';
+	$: fuzzySearchInput = '';
 
-	$: results = fuzzySearch(inputDemo);
+	$: results = fuzzySearch(fuzzySearchInput);
 
-	const isMember = <T extends unknown>(item?: T): item is T => !!item;
+	const isMember = (item?: Member): item is Member => Boolean(item);
 
-	const prefilteredData = memberField === 'voting' ? members.filter((x) => !x.inPerson) : members;
+	const prefilteredData =
+		memberField === 'voting' ? $membersStore.filter((x) => !x.inPerson) : $membersStore;
 
 	$: prefilteredTable =
-		inputDemo !== ''
-			? results.map((x) => $membersStore.get(x.item)).filter(isMember)
+		fuzzySearchInput !== ''
+			? results.map((x) => lookupItemIdxByNickname(x.item)).filter(isMember)
 			: prefilteredData;
 
 	let sortingOrder: 'asc' | 'dsc' = 'asc';
@@ -72,16 +82,18 @@
 		class="input mb-10"
 		type="search"
 		name="demo"
-		bind:value={inputDemo}
+		bind:value={fuzzySearchInput}
 		placeholder="Search..."
 		on:keypress={(e) => {
 			if (e.key !== 'Enter') return;
-			membersStore.update((store) => {
-				const item = store.get(results[0].item);
-				if (item) item.inPerson = !item.inPerson;
-				return store;
-			});
-			inputDemo = '';
+			if (results.length === 0) return;
+			const item = lookupItemIdxByNickname(results[0].item);
+			if (item) {
+				item[memberField] = !item[memberField];
+				// Force update of svelte data
+				$membersStore = $membersStore;
+				fuzzySearchInput = '';
+			}
 		}}
 	/>
 
@@ -130,11 +142,8 @@
 									type="checkbox"
 									bind:checked={member[memberField]}
 									on:change={(e) => {
-										// Force svelte to update the field, due to race condition
-										membersStore.update((updater) => {
-											const map = updater;
-											return map;
-										});
+										// Force svelte to re-set the store
+										membersStore.set($membersStore);
 									}}
 								/>
 							</label>

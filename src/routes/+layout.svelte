@@ -8,10 +8,16 @@
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 	import Navigation from '$lib/components/Navigation.svelte';
+	import { setContext } from 'svelte';
+	import { makeStore } from '$lib/stores/members-store';
 
+	export let data;
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
+
+	const membersStore = makeStore(data.members);
+	setContext('members', membersStore);
 </script>
 
 <!-- App Shell -->
