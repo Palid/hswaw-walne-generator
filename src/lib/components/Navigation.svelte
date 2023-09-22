@@ -8,15 +8,16 @@
 		faUsers,
 		faFileSignature,
 		faCheckToSlot,
-		faPersonPraying
+		faPersonBooth
 	} from '@fortawesome/free-solid-svg-icons';
 	import Syrenka from '$lib/components/HSMermaid.svelte';
 	import { page } from '$app/stores';
 
 	$: routeId = $page.route.id;
+	export let isDrawer = false;
 </script>
 
-<AppRail>
+<AppRail width={isDrawer ? 'w-auto' : 'w-20'}>
 	<AppRailAnchor
 		href="/members/in-person"
 		title="In-person checklist"
@@ -43,7 +44,7 @@
 		selected={routeId === '/members/candidating'}
 	>
 		<svelte:fragment slot="lead">
-			<Fa class="w-full" icon={faPersonPraying} />
+			<Fa class="w-full" icon={faPersonBooth} />
 		</svelte:fragment>
 		<p>Candidating</p>
 	</AppRailAnchor>
