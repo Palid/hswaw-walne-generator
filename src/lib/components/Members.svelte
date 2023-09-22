@@ -8,15 +8,19 @@
 
 	let members: Member[] = [];
 
-	export let memberField: 'voting' | 'inPerson';
+	export let memberField: 'voting' | 'inPerson' | 'candidating';
 	export let header: string;
 
 	membersStore.subscribe((store) => {
 		members = Array.from(store.values());
 	});
 
-	$: totalVotingMembers = members.reduce((acc, { voting }) => acc + (voting ? 1 : 0), 0);
-	$: totalInPersonMembers = members.reduce((acc, { inPerson }) => acc + (inPerson ? 1 : 0), 0);
+	$: totalVotingMembers = members.reduce((acc, { voting }) => acc + Number(voting), 0);
+	$: totalInPersonMembers = members.reduce((acc, { inPerson }) => acc + Number(inPerson), 0);
+	$: totalCandidatingMembers = members.reduce(
+		(acc, { candidating }) => acc + Number(candidating),
+		0
+	);
 
 	const autocompleteOption = members.map((x) => x.nickname);
 
@@ -51,10 +55,15 @@
 	);
 
 	function humanizeField(field: typeof memberField) {
+		// Sometimes ssr failed here
+		if (!field) return '';
 		return field
 			.split(/(?=[A-Z])/)
 			.map((x) => `${x.slice(0, 1).toUpperCase()}${x.slice(1).toLowerCase()}`)
 			.join(' ');
+	}
+	function change(v: any, e: any) {
+		v = e.target.checked;
 	}
 </script>
 
@@ -116,21 +125,40 @@
 						<!-- Style is necessary here for proper hitboxes -->
 						<td style="padding: 0!important" class=" min-w-[120px]">
 							<label class="flex items-center p-4 m-1 cursor-pointer justify-center">
-								<input class="checkbox" type="checkbox" bind:checked={member[memberField]} />
+								<input
+									class="checkbox"
+									type="checkbox"
+									bind:checked={member[memberField]}
+									on:change={(e) => {
+										// Force svelte to update the field, due to race condition
+										membersStore.update((updater) => {
+											const map = updater;
+											return map;
+										});
+									}}
+								/>
 							</label>
 						</td>
 					</tr>
 				{/each}
 			</tbody>
 			<tfoot class="table-foot">
-				<tr>
-					<th colspan="1">Voting members</th>
-					<td>{totalVotingMembers}</td>
-				</tr>
-				<tr>
-					<th colspan="1">In person members</th>
-					<td>{totalInPersonMembers}</td>
-				</tr>
+				{#if memberField === 'candidating'}
+					<tr>
+						<th colspan="1">Candidating members</th>
+						<td>{totalCandidatingMembers}</td>
+					</tr>
+					<tr />
+				{:else}
+					<tr>
+						<th colspan="1">Voting members</th>
+						<td>{totalVotingMembers}</td>
+					</tr>
+					<tr>
+						<th colspan="1">In person members</th>
+						<td>{totalInPersonMembers}</td>
+					</tr>
+				{/if}
 			</tfoot>
 		</table>
 	</div>

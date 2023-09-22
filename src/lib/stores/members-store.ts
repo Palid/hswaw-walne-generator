@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
 const fakerData = [
@@ -123,7 +124,9 @@ export class Member {
 	 */
 	#_inPerson = false;
 
-	constructor(public readonly nickname: string) {}
+	public candidating = false;
+
+	constructor(public readonly nickname: string, public readonly legalName?: string) {}
 
 	public get voting() {
 		return this.#_voting;
@@ -139,12 +142,55 @@ export class Member {
 		this.#_voting = value;
 		this.#_inPerson = value;
 	}
+
+	public toJSON() {
+		return {
+			legalName: this.legalName,
+			nickname: this.nickname,
+			voting: this.voting,
+			inPerson: this.inPerson,
+			candidating: this.candidating
+		};
+	}
 }
+
+// function mapDataToMap(members: Array<[string, Member]>) {
+// 	return members.map
+// }
 
 const mappedNicks: Array<[string, Member]> = fakerData.map(
 	(x) => [x, new Member(x)] as [string, Member]
 );
 
-const membersStore = writable<Map<string, Member>>(new Map(mappedNicks));
+const membersStore = writable<Map<string, Member>>(new Map());
+
+// Hydrate store
+if (browser) {
+	if (localStorage) {
+		const items = localStorage.getItem('chosenMembers') ?? '[]';
+		try {
+			const parsed = JSON.parse(items);
+			if (parsed.length > 0) {
+				membersStore.set(new Map(parsed));
+			} else {
+				membersStore.set(new Map(mappedNicks));
+			}
+		} catch (err) {
+			membersStore.set(new Map(mappedNicks));
+		}
+	}
+	membersStore.subscribe((data) => {
+		if (localStorage) {
+			const serialized = JSON.stringify(data, function replacer(key, value) {
+				if (value instanceof Map) {
+					return Array.from(value.entries()); // or with spread: value: [...value]
+				} else {
+					return value;
+				}
+			});
+			localStorage.setItem('chosenMembers', serialized);
+		}
+	});
+}
 
 export default membersStore;

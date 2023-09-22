@@ -1,10 +1,13 @@
 <script lang="ts">
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
-	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
+	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 
 	import Fa from 'svelte-fa/src/fa.svelte';
-	import { faUsers, faFileSignature, faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faUsers,
+		faFileSignature,
+		faCheckToSlot,
+		faPersonPraying
+	} from '@fortawesome/free-solid-svg-icons';
 	import Syrenka from '$lib/components/HSMermaid.svelte';
 	import { page } from '$app/stores';
 
@@ -23,16 +26,26 @@
 		<p>In-person checklist</p>
 	</AppRailAnchor>
 	<AppRailAnchor
-		href="/members/passed"
-		title="Passed-permissions voters"
-		selected={routeId === '/members/passed'}
+		href="/members/power-of-attorney"
+		title="Power of attorney voters"
+		selected={routeId === '/members/power-of-attorney'}
 	>
 		<svelte:fragment slot="lead">
 			<Fa class="w-full" icon={faFileSignature} />
 		</svelte:fragment>
-		<p>Passed-permissions voters</p>
+		<p>Power of attorney</p>
 	</AppRailAnchor>
-	<AppRailAnchor href="/voting/create" title="Create poll" selected={routeId === '/voting/create'}>
+	<AppRailAnchor
+		href="/members/candidating"
+		title="Candidating members"
+		selected={routeId === '/members/candidating'}
+	>
+		<svelte:fragment slot="lead">
+			<Fa class="w-full" icon={faPersonPraying} />
+		</svelte:fragment>
+		<p>Candidating</p>
+	</AppRailAnchor>
+	<AppRailAnchor href="/voting" title="Create poll" selected={routeId === '/voting'}>
 		<svelte:fragment slot="lead">
 			<Fa class="w-full" icon={faCheckToSlot} />
 		</svelte:fragment>

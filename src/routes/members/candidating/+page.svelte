@@ -8,6 +8,6 @@
 </svelte:head>
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center flex flex-col items-center">
-		<svelte:component this={Members} memberField="voting" header="Passed permissions" />
+		<svelte:component this={Members} memberField="candidating" header="Candidating" />
 	</div>
 </div>
