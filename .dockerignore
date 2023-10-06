@@ -1,0 +1,9 @@
+.svelte-kit
+Dockerfile
+.dockerignore
+node_modules
+tests
+.vscode
+.husky
+.git
+.env

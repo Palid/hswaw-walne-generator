@@ -2,6 +2,9 @@
 	"name": "walne",
 	"version": "0.0.1",
 	"private": true,
+	"engines": {
+		"node": ">=18.18.0"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -48,10 +51,12 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/core": "^0.15.1",
 		"@auth/sveltekit": "^0.3.7",
 		"@fortawesome/free-brands-svg-icons": "^6.4.0",
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@nozbe/microfuzz": "^1.0.0",
+		"@sveltejs/adapter-node": "^1.3.1",
 		"ldapts": "^6.0.0",
 		"svelte-fa": "^3.0.4",
 		"tiny-invariant": "^1.3.1"

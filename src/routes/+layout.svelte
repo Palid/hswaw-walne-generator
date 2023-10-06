@@ -13,7 +13,9 @@
 
 	export let data;
 	function drawerOpen(): void {
-		drawerStore.open({});
+		drawerStore.open({
+			width: 'w-[40%]'
+		});
 	}
 
 	const membersStore = makeStore(data.members);
@@ -57,8 +59,8 @@
 			<Navigation />
 		</div>
 	</svelte:fragment>
-	<div class="container h-full mx-auto flex justify-center items-center">
-		<Drawer><Navigation /></Drawer>
+	<div class="container h-full mx-auto flex justify-center items-center w-5">
+		<Drawer><Navigation isDrawer={true} /></Drawer>
 		<slot />
 	</div>
 </AppShell>

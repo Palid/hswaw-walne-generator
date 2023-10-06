@@ -6,10 +6,13 @@ import { LdapHydrationService } from '$lib/hydration/LdapHydrationService.js';
 import invariant from 'tiny-invariant';
 
 /** @type {import('./$types').LayoutServerLoad} */
-export async function load({ route }) {
-	if (route.id === '/') {
-		throw redirect(308, '/members/in-person');
+export async function load({ route, locals }) {
+	const session = await locals.getSession();
+
+	if (!session) {
+		throw redirect(302, '/auth/signin');
 	}
+
 	let ldap = true;
 	try {
 		invariant(
@@ -21,7 +24,6 @@ export async function load({ route }) {
 			'SERVICE_USER_PASSWORD is not defined, reverting to fake hydration'
 		);
 	} catch (e) {
-		console.log(e);
 		ldap = false;
 	}
 
